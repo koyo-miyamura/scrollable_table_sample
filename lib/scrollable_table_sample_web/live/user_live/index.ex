@@ -4,9 +4,14 @@ defmodule ScrollableTableSampleWeb.UserLive.Index do
   alias ScrollableTableSample.Users
   alias ScrollableTableSample.Users.User
 
+  @default_page 1
+  @per_page 20
+
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :users, list_users())}
+    socket
+    |> assing_paginate_users(page: @default_page, per_page: @per_page)
+    |> then(&{:ok, &1})
   end
 
   @impl true
@@ -37,10 +42,42 @@ defmodule ScrollableTableSampleWeb.UserLive.Index do
     user = Users.get_user!(id)
     {:ok, _} = Users.delete_user(user)
 
-    {:noreply, assign(socket, :users, list_users())}
+    socket
+    |> assing_paginate_users(page: @default_page, per_page: @per_page)
+    |> then(&{:noreply, &1})
   end
 
-  defp list_users do
-    Users.list_users()
+  @impl true
+  def handle_event("load_more", _, %{assigns: assigns} = socket) do
+    next_page = assigns.page + 1
+
+    {:noreply,
+     socket
+     |> assing_paginate_users(page: next_page, per_page: @per_page)}
+  end
+
+  defp assing_paginate_users(socket, page: page, per_page: per_page) do
+    paginate_users(page: page, per_page: per_page)
+    |> then(&assign(socket, &1))
+  end
+
+  defp paginate_users(page: current_page, per_page: per_page) do
+    %{
+      entries: entries,
+      page_number: page,
+      page_size: _page_size,
+      total_entries: _total_entries,
+      total_pages: total_pages
+    } =
+      Users.list_users(
+        page: current_page,
+        per_page: per_page
+      )
+
+    [
+      users: entries,
+      page: page,
+      total_pages: total_pages
+    ]
   end
 end

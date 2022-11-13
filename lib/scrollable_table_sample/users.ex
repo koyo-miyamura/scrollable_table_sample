@@ -21,6 +21,13 @@ defmodule ScrollableTableSample.Users do
     Repo.all(User)
   end
 
+  def list_users(page: page, per_page: per_page) do
+    from(u in User,
+      order_by: [desc: u.updated_at, desc: u.id]
+    )
+    |> Repo.paginate(page: page, page_size: per_page)
+  end
+
   @doc """
   Gets a single user.
 
