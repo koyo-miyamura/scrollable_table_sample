@@ -13,7 +13,7 @@
   </.modal>
 <% end %>
 
-<div style="overflow-y: scroll; max-height: 70vh;">
+<div style="overflow-y: scroll; max-height: 70vh;" class="infinite-scrollable-table">
   <table>
     <thead>
       <tr>
@@ -22,7 +22,14 @@
         <th></th>
       </tr>
     </thead>
-    <tbody id="users">
+    <tbody
+      id="users"
+      phx-update="append"
+      phx-hook="InfiniteScroll"
+      data-page={@page}
+      data-total_pages={@total_pages}
+      data-el=".infinite-scrollable-table"
+    >
       <%= for user <- @users do %>
         <tr id={"user-#{user.id}"}>
           <td><%= user.name %></td>
