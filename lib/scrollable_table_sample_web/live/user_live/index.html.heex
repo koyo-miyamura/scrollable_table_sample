@@ -13,27 +13,29 @@
   </.modal>
 <% end %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
+<div style="overflow-y: scroll; max-height: 70vh;">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="users">
-    <%= for user <- @users do %>
-      <tr id={"user-#{user.id}"}>
-        <td><%= user.name %></td>
-
-        <td>
-          <span><%= live_redirect "Show", to: Routes.user_show_path(@socket, :show, user) %></span>
-          <span><%= live_patch "Edit", to: Routes.user_index_path(@socket, :edit, user) %></span>
-          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: user.id, data: [confirm: "Are you sure?"] %></span>
-        </td>
+        <th></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody id="users">
+      <%= for user <- @users do %>
+        <tr id={"user-#{user.id}"}>
+          <td><%= user.name %></td>
+
+          <td>
+            <span><%= live_redirect "Show", to: Routes.user_show_path(@socket, :show, user) %></span>
+            <span><%= live_patch "Edit", to: Routes.user_index_path(@socket, :edit, user) %></span>
+            <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: user.id, data: [confirm: "Are you sure?"] %></span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 
 <span><%= live_patch "New User", to: Routes.user_index_path(@socket, :new) %></span>
