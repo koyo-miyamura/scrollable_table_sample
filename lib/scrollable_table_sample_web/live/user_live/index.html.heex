@@ -13,23 +13,18 @@
   </.modal>
 <% end %>
 
-<div style="overflow-y: scroll; max-height: 70vh;" class="infinite-scrollable-table">
-  <DataTable.table rows={@users} page={@page} total_pages={@total_pages}>
-    <:thead>
-      <th>Name</th>
-      <th></th>
-    </:thead>
+<ScrollableDataTable.table rows={@users} page={@page} total_pages={@total_pages}>
+  <:columns let={user} label="Name">
+    <td><%= user.name %></td>
+  </:columns>
 
-    <:tbody let={user}>
-      <td><%= user.name %></td>
-
-      <td>
-        <span><%= live_redirect "Show", to: Routes.user_show_path(@socket, :show, user) %></span>
-        <span><%= live_patch "Edit", to: Routes.user_index_path(@socket, :edit, user) %></span>
-        <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: user.id, data: [confirm: "Are you sure?"] %></span>
-      </td>
-    </:tbody>
-  </DataTable.table>
-</div>
+  <:columns let={user} label="">
+    <td>
+      <span><%= live_redirect "Show", to: Routes.user_show_path(@socket, :show, user) %></span>
+      <span><%= live_patch "Edit", to: Routes.user_index_path(@socket, :edit, user) %></span>
+      <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: user.id, data: [confirm: "Are you sure?"] %></span>
+    </td>
+  </:columns>
+</ScrollableDataTable.table>
 
 <span><%= live_patch "New User", to: Routes.user_index_path(@socket, :new) %></span>
