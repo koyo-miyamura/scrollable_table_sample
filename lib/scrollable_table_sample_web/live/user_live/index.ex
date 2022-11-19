@@ -1,6 +1,7 @@
 defmodule ScrollableTableSampleWeb.UserLive.Index do
   use ScrollableTableSampleWeb, :live_view
 
+  alias ScrollableTableSampleWeb.Components.DataTable
   alias ScrollableTableSample.Users
   alias ScrollableTableSample.Users.User
 

@@ -14,35 +14,22 @@
 <% end %>
 
 <div style="overflow-y: scroll; max-height: 70vh;" class="infinite-scrollable-table">
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
+  <DataTable.table rows={@users} page={@page} total_pages={@total_pages}>
+    <:thead>
+      <th>Name</th>
+      <th></th>
+    </:thead>
 
-        <th></th>
-      </tr>
-    </thead>
-    <tbody
-      id="users"
-      phx-update="append"
-      phx-hook="InfiniteScroll"
-      data-page={@page}
-      data-total_pages={@total_pages}
-      data-el=".infinite-scrollable-table"
-    >
-      <%= for user <- @users do %>
-        <tr id={"user-#{user.id}"}>
-          <td><%= user.name %></td>
+    <:tbody let={user}>
+      <td><%= user.name %></td>
 
-          <td>
-            <span><%= live_redirect "Show", to: Routes.user_show_path(@socket, :show, user) %></span>
-            <span><%= live_patch "Edit", to: Routes.user_index_path(@socket, :edit, user) %></span>
-            <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: user.id, data: [confirm: "Are you sure?"] %></span>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+      <td>
+        <span><%= live_redirect "Show", to: Routes.user_show_path(@socket, :show, user) %></span>
+        <span><%= live_patch "Edit", to: Routes.user_index_path(@socket, :edit, user) %></span>
+        <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: user.id, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </:tbody>
+  </DataTable.table>
 </div>
 
 <span><%= live_patch "New User", to: Routes.user_index_path(@socket, :new) %></span>
