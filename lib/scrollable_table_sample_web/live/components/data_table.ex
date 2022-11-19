@@ -7,26 +7,28 @@ defmodule ScrollableTableSampleWeb.Components.DataTable do
   def table(assigns) do
     ~H"""
       <table>
-        <thead>
-          <tr>
-            <%= render_slot(@thead) %>
-          </tr>
-        </thead>
-        <tbody
-          id="users"
-          phx-update="append"
-          phx-hook="InfiniteScroll"
-          data-page={@page}
-          data-total_pages={@total_pages}
-          data-el=".infinite-scrollable-table"
-        >
-          <%= for row <- @rows do %>
-            <tr id={"user-#{row.id}"}>
-              <%= render_slot(@tbody, row) %>
-            </tr>
-          <% end %>
-        </tbody>
+        <%= render_slot(@inner_block) %>
       </table>
+    """
+  end
+
+  def thead(assigns) do
+    ~H"""
+      <thead>
+        <tr>
+          <%= render_slot(@inner_block) %>
+        </tr>
+      </thead>
+    """
+  end
+
+  def tbody(assigns) do
+    ~H"""
+    <%= for row <- @rows do %>
+      <tr id={"row-#{row.id}"}>
+        <%= render_slot(@inner_block, row) %>
+      </tr>
+    <% end %>
     """
   end
 end
